@@ -1,14 +1,16 @@
-import "./styles.css";
-import "./index.html";
 import {
   error,
   defaultModules,
 } from "../node_modules/@pnotify/core/dist/PNotify.js";
 import "../node_modules/@pnotify/core/dist/BrightTheme.css";
+const basicLightbox = require("basiclightbox");
+// import * as basicLightbox from "basiclightbox";
 import searchFormMarkup from "./tpl/search-form.hbs";
 import galleryMarkup from "./tpl/gallery.hbs";
 import galleryCardMarkup from "./tpl/gallery-card.hbs";
 import ApiService from "./apiService";
+import "./styles.css";
+import "./index.html";
 
 const debounce = require("lodash.debounce");
 const Handlebars = require("handlebars");
@@ -22,14 +24,18 @@ const searchFormRef = document.getElementById("search-form");
 const searchInputRef = document.querySelector(".search-form__input");
 const imageRef = document.querySelector(".image");
 const loadMoreBtnRef = document.querySelector(".load-more-btn");
-const scrollHeight = document.body.scrollHeight;
+const upBtnRef = document.querySelector(".up-btn");
+const scrollDownHeight = document.body.scrollHeight;
+const scrollUpHeight = document.body.scrollTop;
 
 searchInputRef.addEventListener("input", debounce(onSearchInput, 500));
 loadMoreBtnRef.addEventListener("click", onLoadMoreBtnClick);
+upBtnRef.addEventListener("click", onUpBtnClick);
 
 function clearGallery() {
   galleryRef.innerHTML = "";
   loadMoreBtnRef.classList.add("hidden");
+  upBtnRef.classList.add("hidden");
 }
 function onSearchInput(e) {
   clearGallery();
@@ -42,36 +48,55 @@ function onLoadMoreBtnClick(e) {
   apiService.fetchImages().then((hits) => renderGallery(hits));
   scrollGallery();
 }
-function renderGallery(hits) {
-  if (hits.length === 0) {
-    debounce(
-      error({
-        text: "Try another letters :)",
-        type: error,
-        styling: "brighttheme",
-        title: false,
-        animation: "fade",
-        animateSpeed: "slow",
-        delay: 1500,
-        icon: false,
-        closer: false,
-        sticker: false,
-        width: 15,
-      }),
-      500
-    );
-  } else {
-    const galleryAllCardsMarkup = galleryCardMarkup(hits);
-    galleryRef.insertAdjacentHTML("beforeend", galleryAllCardsMarkup);
-    loadMoreBtnRef.classList.remove("hidden");
-  }
+function onUpBtnClick(e) {
+  window.scrollTo({
+    top: scrollUpHeight,
+    behavior: "smooth",
+  });
 }
-function scrollGallery(scrollHeight) {
+function scrollGallery(scrollDownHeight) {
   window.addEventListener(
     "load",
     window.scrollTo({
-      top: scrollHeight,
+      top: scrollDownHeight,
       behavior: "smooth",
     })
   );
 }
+function renderGallery(hits) {
+  if (hits.length === 0) {
+    error({
+      text: "Try another letters :)",
+      type: error,
+      styling: "brighttheme",
+      title: false,
+      animation: "fade",
+      animateSpeed: "slow",
+      delay: 1500,
+      icon: false,
+      closer: false,
+      sticker: false,
+      width: 15,
+    });
+  } else {
+    const galleryAllCardsMarkup = galleryCardMarkup(hits);
+    galleryRef.insertAdjacentHTML("beforeend", galleryAllCardsMarkup);
+    loadMoreBtnRef.classList.remove("hidden");
+    upBtnRef.classList.remove("hidden");
+  }
+}
+// LIGHT BOX
+window.addEventListener("click", getLargeImage);
+function getLargeImage(e) {
+  if (e.target.nodeName !== "IMG") {
+    return;
+  } else {
+  }
+}
+
+const instance = basicLightbox.create(
+  `
+    <img class="image-large" src="" alt=""> 
+    `
+);
+instance.show();
