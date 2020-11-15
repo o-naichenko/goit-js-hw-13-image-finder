@@ -10,6 +10,7 @@ import galleryMarkup from "./tpl/gallery.hbs";
 import galleryCardMarkup from "./tpl/gallery-card.hbs";
 import ApiService from "./apiService";
 import "./styles.css";
+import "./light-box.scss";
 import "./index.html";
 
 const debounce = require("lodash.debounce");
@@ -85,18 +86,15 @@ function renderGallery(hits) {
     upBtnRef.classList.remove("hidden");
   }
 }
-// LIGHT BOX
+let instance = null;
+// LIGHT BOX IT`S ALIVE :)
 window.addEventListener("click", getLargeImage);
 function getLargeImage(e) {
   if (e.target.nodeName !== "IMG") {
     return;
   } else {
+    instance = basicLightbox
+      .create(`<img class="img" src=${e.target.dataset.path}>`)
+      .show();
   }
 }
-
-const instance = basicLightbox.create(
-  `
-    <img class="image-large" src="" alt=""> 
-    `
-);
-instance.show();
