@@ -3,12 +3,16 @@ export default class ApiService {
     this.API_KEY = "19115402-2f4ed690e134b4c839000dec3";
     this.searchQuery = "";
     this.queryPage = 1;
+    this.perPage = 12;
   }
   fetchImages() {
-    const url = `https://pixabay.com/api/?key=${this.API_KEY}&q=${this.searchQuery}&page=${this.queryPage}`;
+    const url = `https://pixabay.com/api/?key=${this.API_KEY}&q=${this.searchQuery}&page=${this.queryPage}&per_page=${this.perPage}`;
     return fetch(url)
       .then((r) => r.json())
-      .then(this.incrementQueryPage());
+      .then(({ hits }) => {
+        this.incrementQueryPage();
+        return hits;
+      });
   }
   incrementQueryPage() {
     this.queryPage += 1;
