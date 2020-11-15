@@ -30,7 +30,7 @@ const scrollDownHeight = document.body.scrollHeight;
 const scrollUpHeight = document.body.scrollTop;
 
 searchInputRef.addEventListener("input", debounce(onSearchInput, 500));
-loadMoreBtnRef.addEventListener("click", onLoadMoreBtnClick);
+loadMoreBtnRef.addEventListener("click", debounce(onLoadMoreBtnClick, 500));
 upBtnRef.addEventListener("click", onUpBtnClick);
 
 function clearGallery() {
@@ -55,14 +55,14 @@ function onUpBtnClick(e) {
     behavior: "smooth",
   });
 }
-function scrollGallery(scrollDownHeight) {
-  window.addEventListener(
-    "load",
-    window.scrollTo({
-      top: scrollDownHeight,
-      behavior: "smooth",
-    })
-  );
+window.onload = function (scrollDownHeight) {
+  window.scrollTo({
+    top: scrollDownHeight,
+    behavior: "smooth",
+  });
+};
+function scrollGallery() {
+  debounce(window.onload(), 100);
 }
 function renderGallery(hits) {
   if (hits.length === 0) {
