@@ -37,7 +37,7 @@ body {
 }
 .photo-card {
   display: block;
-  width: calc((100% - 60px) / 3);
+  width: calc((100% - 80px) / 4);
   margin: 10px;
 }
 .photo-card img {
@@ -51,6 +51,9 @@ body {
   color: #ffffff;
   text-align: center;
   text-shadow: 3px 3px 7px rgba(0, 0, 0, 1);
+}
+.stats:hover {
+  font-size: 20px;
 }
 .material-icons {
   display: block;
