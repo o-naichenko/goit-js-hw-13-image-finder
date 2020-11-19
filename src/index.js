@@ -90,9 +90,7 @@ let instance = null;
 // LIGHT BOX IT`S ALIVE :)
 window.addEventListener("click", getLargeImage);
 function getLargeImage(e) {
-  if (e.target.nodeName !== "IMG") {
-    return;
-  } else {
+  if (e.target.nodeName === "IMG") {
     instance = basicLightbox
       .create(`<img class="img" src=${e.target.dataset.path}>`)
       .show();
